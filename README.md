@@ -61,4 +61,4 @@ So we had succesfully recreated the magic_string!!!
 
 There was a succesfull sleep!!
 
-We also got excited and found that both nano and gdb were on the box, as the website would load forever and then spit out a bad gateway error.
+We also got excited and found that both nano and gdb were on the box, as the website would load for a while and then spit out a bad gateway error.
