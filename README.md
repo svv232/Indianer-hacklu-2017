@@ -26,7 +26,7 @@ exploit to work. We also figured out that an interesting error message would app
 
 [picture]()
 
-> After any succesful GET request with "ndex.html" was sent the message would be directed to this block of code. There an algorithm with ordinal operations, bit swapping would be implemented on the variable _ in the GOT, and the counter and trigger variables would be updated accordingly. By the end of all the string operations on _ ,a magic string would be created. Essentially, if this magic string was in the GET request and set equal to a command low priority
+> After a succesful GET request with "ndex.html" was sent the message would be directed to this block of code. There an algorithm with ordinal operations, bit swapping, and string operations would be implemented on the variable _ in the GOT, and the counter and trigger variables would be updated accordingly. By the end of all the string operations on _ ,a magic string would be created. Essentially, if this magic string was in the GET request and set equal to a command low priority
 shell access would be granted.
 
 > Ex. - url/magic_string=command
@@ -36,15 +36,39 @@ shell access would be granted.
 
 [picture]()
 
-> Reproducing the magic string was starting to get slightly more difficult, so we decided to open up the shared object binary in IDA, and used hexrays to decipher what the algorithm was doing with the _ variable in the GOT. This way we
-
+> Reproducing the magic string was starting to get slightly more difficult, so we decided to open up the shared object binary in IDA, and used hexrays to decipher what the algorithm was doing with the _ variable in the GOT. This way we could reproduce
+the string and gain command injection into the system call as a relatively unprivelaged user.
 
 Here is the [IDA disassembly]()
 -------------------------------
 
-As you can see it is much neater.
+> As you can see it is much neater. Lines 31 - 74 were what we reversed and re 
+wrote to spot the behavior , and reemulate the algorithm.
 
-We used this code to write a [python script]() that reproduced the magic string.
+[picture]()
+
+> We used this code to write a [python script]() that reproduced the magic string with 
+some help from our friend [Josh](hypersonic.me), another member of NYUSEC.
+
+The output of the script was ...
+    dpdpdpamamamamajvjvjvjvgsgsgsgsgpdp
+
+So we had succesfully recreated the magic_string!!!
+
+> We tested with the following command 
+
+'https://indianer.flatearth.fluxfingers.net/0ndex.html dpdpdpamamamamajvjvjvjvgsgsgsgsgpdp=' + sleep(10) + '_%23'
+
+There was a succesfull sleep!!
+
+We also got excited and found that both nano and gdb were on the box, as the website would load forever and then spit out a bad gateway error.
+
+
+
+
+
+
+
 
 
 
