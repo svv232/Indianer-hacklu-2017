@@ -51,7 +51,7 @@ wrote to spot the behavior , and reemulate the algorithm.
 some help from our friend [Josh](hypersonic.me), another member of NYUSEC.
 
 The output of the script was ...
-    ``` python dpdpdpamamamamajvjvjvjvgsgsgsgsgpdp ```
+    ``` dpdpdpamamamamajvjvjvjvgsgsgsgsgpdp ```
 
 So we had succesfully recreated the magic_string!!!
 
