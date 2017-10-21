@@ -48,7 +48,7 @@ wrote to spot the behavior , and reemulate the algorithm.
 [picture]()
 
 > We used this code to write a [python script]() that reproduced the magic string with 
-some help from our friend [Josh](hypersonic.me), another member of NYUSEC.
+some help from our friend [Josh](www.hypersonic.me), another member of NYUSEC.
 
 The output of the script was ...
     ``` dpdpdpamamamamajvjvjvjvgsgsgsgsgpdp ```
