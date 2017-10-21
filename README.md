@@ -51,24 +51,14 @@ wrote to spot the behavior , and reemulate the algorithm.
 some help from our friend [Josh](hypersonic.me), another member of NYUSEC.
 
 The output of the script was ...
-    dpdpdpamamamamajvjvjvjvgsgsgsgsgpdp
+    ``` python dpdpdpamamamamajvjvjvjvgsgsgsgsgpdp ```
 
 So we had succesfully recreated the magic_string!!!
 
 > We tested with the following command 
 
-'https://indianer.flatearth.fluxfingers.net/0ndex.html dpdpdpamamamamajvjvjvjvgsgsgsgsgpdp=' + sleep(10) + '_%23'
+'https://indianer.flatearth.fluxfingers.net/0ndex.html/ dpdpdpamamamamajvjvjvjvgsgsgsgsgpdp=' + sleep(10) + '_%23'
 
 There was a succesfull sleep!!
 
 We also got excited and found that both nano and gdb were on the box, as the website would load forever and then spit out a bad gateway error.
-
-
-
-
-
-
-
-
-
-
