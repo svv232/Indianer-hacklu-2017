@@ -1,0 +1,18 @@
+/usr - GOOD //has a flag file in the dir
+/run 
+/dockerenv
+/root/
+/etc
+/tmp
+/lib
+/bin
+/usr/share/
+/sbin
+
+apache2.conf
+
+ports.conf
+
+
+
+
