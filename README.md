@@ -66,7 +66,7 @@ some help from our friend Josh, another member of NYUSEC.
 ```
 
 The output of the script was ...
-    ``` dpdpdpamamamamajvjvjvjvgsgsgsgsgpdp ```
+``` dpdpdpamamamamajvjvjvjvgsgsgsgsgpdp ```
 
 So we had successfully recreated the magic_string!!!
 
