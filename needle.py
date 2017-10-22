@@ -2,7 +2,6 @@ def cstr(s):
     return s[:s.index('\x00')]
 
 request = 'GET /asdf.html?dpdpdpamamamamajvjvjvjvgsgsgsgsgpdp=cat_/etc/passwd HTTP/1.1\x00'
-#print(request)
 underscore = ord('n')
 trigger = 1 if 'GET' in request else 0
 counter = 0
