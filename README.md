@@ -5,60 +5,65 @@ This is a joint write-up for the hacklu 2017 ctf problem indianer completed by S
 
 Initially, the challenge included a [binary](svv232/Indianer-hacklu-2017/blob/master/backdoor.so) and a link to a [regular website](https://indianer.flatearth.fluxfingers.net/) that had a "super secret" backdoor.
 
-[picture]
-
 After downloading and unzipping, we noticed the .so file header on the binary, indicating that it was a shared object. This meant it was a small part of a code base that we did not have access to. There was also nothing that could be executed within the file meaning dynamic analysis was not a plausible strategy. Fortunately, after opening the file in binary ninja we uncovered a few key points that brought forth some clarity.
-
-[picture]()
 
 The binary was essentially a libc wrapper that the Apache server was patched with. We concluded it was an Apache server after making the webpage error out. We found a custom strlen function in the backdoor. Analyzing the control flow of strlen introduced some abnormality and exploitability.
 
-[Strlen Disassembly]()
-----------------------
-
-[picture]()
+Disassembly
+-------------------
 
 First off, there was a system call in this block of the function, so the remainder of our exploitation was geared towards writing into the sys-call to leak the flag.
 
-[picture]()
+![](/pictures/System.png?raw=true)
 
 Looking back at the start of the function, strcmp is called at 0xa0c checking if
 data_da0, or the string 'GET', indicated in hex view, was the request type. Trigger, a variable in the GOT, was incremented if that was the case. The string "ndex.html" was then checked for at 0xa48; if "ndex.html" exists and a variable apr_hook_debug_enabled is set, a visible error message appears. The value of apr_hook_debug_enabled is set to the error code of the system call plus the byte before the "ndex.html" argument in the HTTP request. Error code 1 for example would result in the debug variable being set to i + 1 or j if the arg was index. So we knew that the error code could be controlled for exploitation as an exit code can be set to any value via the system call.
 
-[picture]
 
 The binary checks if both "ndex.html" is in the HTTP request and if debug is not 0. If both are true, the debug value is displayed; If either are false, the system call occurs, but no exfiltration is possible.
 
-[picture]
 
-After a successful GET request with a sufficient argument was sent, the message would be directed to this block of code.
+After a successful GET request with a sufficient argument was sent, the message would be directed to this block of code:
 
-[picture]
+![](/pictures/Debug.png?raw=true)
 
 There an algorithm with ordinal operations, bit swapping, and string operations would be implemented on the variable _ , and the counter and trigger variables would be updated accordingly. _ was set to the ordinal of 'n'. From there the algorithm used _ to set the value of a magic string needle. If needle was set to the right value by the end of all the string operations and sent within a GET request, command injection would be possible. The binary checks if the next character is an '='. Everything past the '=' would be sent to the system call.
 
 Ex. - url/needle=command
 
-[picture]()
+![](/pictures/Needle.png?raw=true)
 
-
-[picture]()
 
 Reproducing the needle was starting to get slightly more difficult, so we decided to open up the shared object binary in IDA, and used hexrays to decipher what the algorithm was doing with the _ variable in the GOT.
 
-[IDA disassembly]() and Analysis
+[Hexray Analysis](/pictures/Full_IDA.jpg?raw=true)
 -------------------------------
 
-As you can see it is much neater. Lines 31 - 74 were what we reversed and re-emulated.
+![](/pictures/IDA_needle.png?raw=true)
+
+As you can see it is much neater.
 
 Needle was first set to a string of null bytes of size hex 100
 looping from 0 to 512 in increments of 9. Needles ith element % 35 was set to the value of chr(((_ & 1) + i) mod 24 + the ordinal of 'a'). Basically, the last bit of _ was added to i and the result modded by 24 plus the ordinal of 'a'. Then, it finds the character representation of that result.
 
 Afterwards, all characters equal to '_' in the request would then be replaced with a space.
 
-[picture]()
 
-We used this code to write a [python script]() that reproduced the magic string with some help from our friend Josh, another member of NYUSEC.
+We used this code to write a python script that reproduced the magic string with
+some help from our friend Josh, another member of NYUSEC.
+
+```python
+
+    underscore = ord('n')
+    needle = [chr(0) for _ in range(0x100)]
+
+    for i in range(0, 512, 9):
+            needle[i % 35] = chr(((underscore & 1) + i) % 24 + ord('a'))
+
+            needle[underscore] = chr(0)
+            print(''.join(needle))
+
+```
 
 The output of the script was ...
 ``` dpdpdpamamamamajvjvjvjvgsgsgsgsgpdp ```
