@@ -11,4 +11,4 @@ for (dirpath, dirnames, filenames) in os.walk('.'):
                     exit(ord(fbody[fbody.index('flag{') + 4:][counter]))
         except IOError:
             pass
-exit(50)
+exit(5)
