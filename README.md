@@ -58,11 +58,10 @@ Afterwards, all characters equal to '_' in the request would then be replaced wi
 
 [picture]()
 
-We used this code to write a [python script]() that reproduced the magic string with
-some help from our friend Josh, another member of NYUSEC.
+We used this code to write a [python script]() that reproduced the magic string with some help from our friend Josh, another member of NYUSEC.
 
 The output of the script was ...
-    ``` dpdpdpamamamamajvjvjvjvgsgsgsgsgpdp ```
+``` dpdpdpamamamamajvjvjvjvgsgsgsgsgpdp ```
 
 So we had successfully recreated the magic_string!!!
 
