@@ -5,8 +5,7 @@ This is a joint write-up for the hacklu 2017 ctf problem indianer completed by S
 
 Initially, the challenge included a [binary](svv232/Indianer-hacklu-2017/blob/master/backdoor.so) and a link to a [regular website](https://indianer.flatearth.fluxfingers.net/) that had a "super secret" backdoor.
 
-Inline-style:
-![alt text]()
+[picture]
 
 After downloading and unzipping, we noticed the .so file header on the binary, indicating that it was a shared object. This meant it was a small part of a code base that we did not have access to. There was also nothing that could be executed within the file meaning dynamic analysis was not a plausible strategy. Fortunately, after opening the file in binary ninja we uncovered a few key points that brought forth some clarity.
 
@@ -25,7 +24,7 @@ First off, there was a system call in this block of the function, so the remaind
 
 Looking back at the start of the function, strcmp is called at 0xa0c checking if
 data_da0, or the string 'GET', indicated in hex view, was the request type. Trigger, a variable in the GOT, was incremented if that was the case. The string "ndex.html" was then checked for at 0xa48; if "ndex.html" exists and a variable apr_hook_debug_enabled is set, a visible error message appears. The value of apr_hook_debug_enabled is set to the error code of the system call plus the byte before the "ndex.html" argument in the HTTP request. Error code 1 for example would result in
-the debug variable being set to i + 1 or j. So we knew that the error code could be controlled for exploitation as an exit code can be set to any value via the system call.
+the debug variable being set to i + 1 or j if the arg was index. So we knew that the error code could be controlled for exploitation as an exit code can be set to any value via the system call.
 
 HTTP Requests are formatted like:
 
@@ -37,8 +36,7 @@ So %23 or '#' had to be concatenated to the end of the url to escape HTTP/1.1
 
 [picture]
 
-The binary checks if "ndex.html" is in the HTTP request and if debug is not 0. If both are true, the debug value is displayed in
-If either are false, the system call occurs, but no exfiltration is possible.
+The binary checks if both "ndex.html" is in the HTTP request and if debug is not 0. If both are true, the debug value is displayed; If either are false, the system call occurs, but no exfiltration is possible.
 
 [picture]
 
@@ -70,7 +68,7 @@ Afterwards, all characters equal to '_' in the request would then be replaced wi
 [picture]()
 
 We used this code to write a [python script]() that reproduced the magic string with
-some help from our friend [Josh](www.hypersonic.me), another member of NYUSEC.
+some help from our friend Josh, another member of NYUSEC.
 
 The output of the script was ...
     ``` dpdpdpamamamamajvjvjvjvgsgsgsgsgpdp ```
