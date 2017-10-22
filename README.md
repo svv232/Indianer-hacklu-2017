@@ -75,11 +75,17 @@ The output of the script was ...
 
 So we had successfully recreated the magic_string!!!
 
+We knew that the HTTP Request was formatted like:
+
+```GET /https://indianer.flatearth.fluxfingers.net HTTP/1.1```
+
+so %23 or '#' had to be concatenated to the end of the url to escape the HTTP/1.1
+
 We tested with the following command
 
 ``` https://indianer.flatearth.fluxfingers.net/0ndex.html dpdpdpamamamamajvjvjvjvgsgsgsgsgpdp=sleep_10_%23 ```
 
-There was a successful sleep!!
+There was a successful sleep!
 
 
 Remote Code Execution
