@@ -25,17 +25,7 @@ First off, there was a system call in this block of the function, so the remaind
 
 Looking back at the start of the function, strcmp is called at 0xa0c checking if
 data_da0, or the string 'GET', indicated in hex view, was the request type. Trigger, a variable in the GOT, was incremented if that was the case. The string "ndex.html" was then checked for at 0xa48; if "ndex.html" exists and a variable apr_hook_debug_enabled is set, a visible error message appears. The value of apr_hook_debug_enabled is set to the error code of the system call plus the byte before the "ndex.html" argument in the HTTP request. Error code 1 for example would result in
-the debug variable being set to i + 1 or j. So we knew that the error code could be controlled for exploitation as an exit code can be set to any value via the system call ...
-
-```exit(any integer)```
-
-HTTP Request was formatted like:
-
-GET /https://indianer.flatearth.fluxfingers.net HTTP/1.1
-
-so %23 had to be concatanated to the end of the url for proper code injection
-
-
+the debug variable being set to i + 1 or j. So we knew that the error code could be controlled for exploitation as an exit code can be set to any value via the system call.
 
 [picture]
 
@@ -79,11 +69,17 @@ The output of the script was ...
 
 So we had successfully recreated the magic_string!!!
 
+We knew that the HTTP Request was formatted like:
+
+```GET /https://indianer.flatearth.fluxfingers.net HTTP/1.1```
+
+so %23 or '#' had to be concatenated to the end of the url to escape the HTTP/1.1
+
 We tested with the following command
 
 ``` https://indianer.flatearth.fluxfingers.net/0ndex.html dpdpdpamamamamajvjvjvjvgsgsgsgsgpdp=sleep_10_%23 ```
 
-There was a successful sleep!!
+There was a successful sleep!
 
 
 Remote Code Execution
