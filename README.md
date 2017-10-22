@@ -1,6 +1,8 @@
 # Hack.lu CTF 2017 Indianer Write Up
 #### By Sai Vegasena and Roy Xu, NYUSEC
 
+[OFFICIAL NYUSEC BLOG LINK](http://blog.isis.poly.edu/2017/10/21/hacklu-ctf-indianer/)
+
 ------------
 
 The challenge was tagged Web/Pwn.
