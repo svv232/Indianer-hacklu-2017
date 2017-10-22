@@ -169,7 +169,7 @@ while True:
     counter += 1
 ```
 
-We replaced all slashes and plus signs to their url encoded versions. Spaces were replaced with underscores, because the binary would convert them to spaces for us. The server was a bit unresponsive and would error out at times. In some cases, we would receive a bad gateway error, so if we did not reach a page that contained "Not Found", we retried the connection. In cases where the backdoor was not processed, the needle was not processed out of the url and so we checked for needle in the response. On successful requests, we parsed out the character directly before "ndex.html" and found the difference from 'i' to get the exit code. We noticed that there were times when the system call would not go through. In those cases we received an exit code of 2 or 0 and retried the request. On success, we increment the counter and repeat.
+We replaced all slashes and plus signs to their url encoded versions. Spaces were replaced with underscores, because the binary would convert them to spaces for us. The server was a bit unresponsive and would error out at times. In some cases, we would receive a bad gateway error, so if we did not reach a page that contained "Not Found", we retried the connection. In cases where the backdoor was not processed, the needle was not processed out of the url and so we checked for needle in the response. On successful requests, we parsed out the character directly before "ndex.html" and found the difference from 'i' to get the exit code. We noticed that there were times when the system call would not go through. In those cases we received an exit code of 2 or 0 and retried the request. On success, we increment the counter and repeat. We also noticed that if we sent a normal request between each repeat, the server behaved a bit more consistently.
 
 Failure and Frustration
 ------------------------
@@ -179,3 +179,24 @@ Attempting to run the python script resulted in an exit code of 2 almost constan
 ```python
 exit(ord(''.join(os.listdir('/'))[counter]))
 ```
+
+However, progress was slow because of the constant exit codes of 2. We assumed that there were only a few worker threads that worked properly. Working off that assumption we tried to hang a connection with the nano command. Our python script immediately began to return the expected error codes. Looking back, it was more likely just weird behavior on their server.
+
+
+Successful Exfiltration
+-------------------------
+
+Now that we were able to consistently run our python scripts, progress was much faster. The root directory contained just the normal linux directories. We then looked through the directories to see what we could find. When we looked through ```/var/www/``` we noticed a flag.txt file. We used the following script to read it:
+
+```python
+with open'/var/www/flag.txt', 'r') as f:
+    exit(ord(f.read()[counter]))
+```
+
+The file contained the flag:
+
+```FLAG{f4ncy_S3CR3T_ex1t}```
+
+We then realized why our initial search for "flag{" turned up empty. Flag was written in caps!
+
+Despite the server issues, overall it was a fun challenge.

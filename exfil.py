@@ -42,6 +42,3 @@ while True:
 
     requests.get(reset)
     counter += 1
-
-
-    exit(ord(''.join(os.listdir('/var/www'))[counter]))
